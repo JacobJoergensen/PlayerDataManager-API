@@ -1,0 +1,4 @@
+function DatabaseConnect(string: text, dbname: text, dbcname: text):
+    set {PDAPI::DatabaseServer} to mongo server with connection string "%{_string}%"
+    set {PDAPI::Database} to mongo database named "%{_dbname}%" of {PDAPI::DatabaseServer}
+    set {PDAPI::DatabaseCollection} to mongo collection named "%{_dbcname}%" of {PDAPI::Database}
