@@ -1,4 +1,16 @@
-function DatabaseConnect(string: text, dbname: text, dbcname: text):
-    set {PDAPI::DatabaseServer} to mongo server with connection string "%{_string}%"
-    set {PDAPI::Database} to mongo database named "%{_dbname}%" of {PDAPI::DatabaseServer}
-    set {PDAPI::DatabaseCollection} to mongo collection named "%{_dbcname}%" of {PDAPI::Database}
+# DATABASE CONNECTION
+function DbConnect(string: text, dbname: text, dbcname: text):
+    set {PDAPI::DbServer} to mongo server with connection string "%{_string}%"
+    set {PDAPI::Db} to mongo database named "%{_dbname}%" of {PDAPI::DbServer}
+    set {PDAPI::DbCollection} to mongo collection named "%{_dbcname}%" of {PDAPI::Db}
+
+# GET PLAYER DATA
+function GetPlayerData(p: player, dataset: text) :: text:
+    set {_doc} to first mongo document with mongosk filter where field "Uuid" is uuid of {_p} of collection {PDAPI::DbCollection}
+    set {_data} to mongo value "%{_dataSet}%" of {_doc}
+    return "%{_data}%"
+
+# UPLOAD PLAYER DATA
+function UploadPlayerData(p: player, dataset: text, value: text):
+    set {_doc} to first mongo document with mongosk filter where field "Uuid" is uuid of {_p} of collection {PDAPI::DbCollection}
+    set mongo value "%{_dataset}%" of {_doc} to "%{_value}%"
