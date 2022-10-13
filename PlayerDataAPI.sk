@@ -3,6 +3,7 @@ function DbConnect(string: text, dbname: text, dbcname: text):
     set {PDAPI::DbServer} to mongo server with connection string "%{_string}%"
     set {PDAPI::Db} to mongo database named "%{_dbname}%" of {PDAPI::DbServer}
     set {PDAPI::DbCollection} to mongo collection named "%{_dbcname}%" of {PDAPI::Db}
+	send "&e&lPDAPI DEBUG &7Connected to SERVER: %{PDAPI::DbServer}%&7, DATABASE NAME: %{PDAPI::Db}%&7, COLLECTION: %{PDAPI::DbCollection}%" to console if {PDAPI::Debug} is true
 
 # GET PLAYER DATA
 function GetPlayerData(p: player, dataset: text, mode: text) :: text:
@@ -29,12 +30,18 @@ function PDAPIcheckPerformance() :: text:
 		return "false"
 
 # COMMANDS
-command /playerdataapi:playerdataapi:
+command /playerdataapi:playerdataapi [<text>]:
     aliases: playerdata, pd, pda
     trigger:
-        send "&c▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ &c&lPlayerData API&c ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"
-        send "&f"
-        send " &8➳ &e/PlayerData &8, &7To show this messages."
-        send formatted "<tooltip:showing tooltip test here><run command:/playerdataapi debug> &8➳ &eClick here to toggle debug mode.<reset>"
-        send "&f"
-        send "&c▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ &c&lPlayerData API&c ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"
+		if arg 1 is not set or arg 1 is "help":
+			send "&c▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ &c&lPlayerData API&c ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"
+			send "&f"
+			send " &8➳ &e/PlayerData &8, &7To show this messages."
+			send formatted "<tooltip:showing tooltip test here><run command:/playerdataapi debug> &8➳ &eClick here to toggle debug mode.<reset>"
+			send "&f"
+			send "&c▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ &c&lPlayerData API&c ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"
+		if arg 1 is "debug":
+			if {PDAPI::Debug} is not set:
+				set {PDAPI::Debug} to true
+			else:
+				delete {PDAPI::Debug}
