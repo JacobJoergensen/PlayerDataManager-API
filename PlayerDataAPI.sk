@@ -1,47 +1,43 @@
 # DATABASE CONNECTION
 function DbConnect(string: text, dbname: text, dbcname: text):
-    set {PDAPI::DbServer} to mongo server with connection string "%{_string}%"
-    set {PDAPI::Db} to mongo database named "%{_dbname}%" of {PDAPI::DbServer}
-    set {PDAPI::DbCollection} to mongo collection named "%{_dbcname}%" of {PDAPI::Db}
-	send "&e&lPDAPI DEBUG &7Connected to SERVER: %{PDAPI::DbServer}%&7, DATABASE NAME: %{PDAPI::Db}%&7, COLLECTION: %{PDAPI::DbCollection}%" to console if {PDAPI::Debug} is true
+	set {PDAPI::DbServer} to mongo server with connection string "%{_string}%"
+	set {PDAPI::Db} to mongo database named "%{_dbname}%" of {PDAPI::DbServer}
+	set {PDAPI::DbCollection} to mongo collection named "%{_dbcname}%" of {PDAPI::Db}
+	send "&c&lPDAPI DEBUG &7Connected to &eSERVER: %{PDAPI::DbServer}%&7, &eDATABASE NAME: %{PDAPI::Db}%&7, &eCOLLECTION: %{PDAPI::DbCollection}%" to console if {PDAPI::Debug} is true
 
 # GET PLAYER DATA
 function GetPlayerData(p: player, dataset: text, mode: text) :: text:
 	if {_mode} is "performance":
-		set {_check} to PDAPIcheckPerformance()
-		if {_check} is "true":
+		if tps is smaller than 14:
+			return "&8(&cSERVER_PERFORMANCE_TOO_BAD&8)"
 			stop
-    set {_doc} to first mongo document with mongosk filter where field "Uuid" is uuid of {_p} of collection {PDAPI::DbCollection}
-    set {_data} to mongo value "%{_dataSet}%" of {_doc}
-    return "%{_data}%"
+	set {_doc} to first mongo document with mongosk filter where field "Uuid" is uuid of {_p} of collection {PDAPI::DbCollection}
+	set {_data} to mongo value "%{_dataSet}%" of {_doc}
+	return "%{_data}%"
 
 # UPLOAD PLAYER DATA
 function UploadPlayerData(p: player, dataset: text, value: text, mode: text):
 	if {_mode} is "performance":
-		set {_check} to PDAPIcheckPerformance()
-		if {_check} is "true":
+		if tps is smaller than 14:
 			stop
-    set {_doc} to first mongo document with mongosk filter where field "Uuid" is uuid of {_p} of collection {PDAPI::DbCollection}
-    set mongo value "%{_dataset}%" of {_doc} to "%{_value}%"
-
-# PERFORMANCE CHECK
-function PDAPIcheckPerformance() :: text:
-	if tps is bigger than 15:
-		return "false"
+	set {_doc} to first mongo document with mongosk filter where field "Uuid" is uuid of {_p} of collection {PDAPI::DbCollection}
+	set mongo value "%{_dataset}%" of {_doc} to "%{_value}%"
 
 # COMMANDS
 command /playerdataapi:playerdataapi [<text>]:
-    aliases: playerdata, pd, pda
-    trigger:
-		if arg 1 is not set or arg 1 is "help":
+	aliases: playerdataapi, playerdata, pd, pda, pdapi
+	trigger:
+		if arg 1 is not set:
 			send "&c▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ &c&lPlayerData API&c ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"
 			send "&f"
-			send " &8➳ &e/PlayerData &8, &7To show this messages."
-			send formatted "<tooltip:showing tooltip test here><run command:/playerdataapi debug> &8➳ &eClick here to toggle debug mode.<reset>"
+			send " &8➳ &e/Pdapi &8, &7To show this messages."
+			send formatted "<tooltip:showing tooltip test here><run command:/pdapi debug> &8➳ &e/Pdapi debug &8, &7Click here to toggle debug mode.<reset>"
 			send "&f"
 			send "&c▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ &c&lPlayerData API&c ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"
 		if arg 1 is "debug":
 			if {PDAPI::Debug} is not set:
 				set {PDAPI::Debug} to true
+				send action bar "&cDebug Mode enabled" to player
 			else:
 				delete {PDAPI::Debug}
+				send action bar "&cDebug Mode disabled" to player
