@@ -3,5 +3,5 @@ on load:
 
 command /getdata:
 	trigger:
-		set {_rank} to GetPlayerData(player, "Rank", "performance")
-		send "&fYour Rank: &7%{_rank}%"
+		set {_uuid} to GetPlayerData(player, "Uuid", "performance")
+		send "&fYour Uuid: &7%{_uuid}%"
