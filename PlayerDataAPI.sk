@@ -22,6 +22,30 @@ function UploadPlayerData(p: player, dataset: text, value: text, mode: text):
 			stop
 	set {_doc} to first mongo document with mongosk filter where field "Uuid" is uuid of {_p} of collection {PDAPI::DbCollection}
 	set mongo value "%{_dataset}%" of {_doc} to "%{_value}%"
+	update mongo document {_doc} of {PDAPI::DbCollection}
+
+# LOAD PLAYER DOCUMENT
+function LoadPlayerDocument(p: player):
+	set {_uuid} to uuid of {_p}
+	set {_doc} to first mongo document with mongosk filter where field "Uuid" is uuid of {_p} of collection {PDAPI::DbCollection}
+	if {_doc} is not set:
+		CreatePlayerDocument({_p})
+	else:
+		SavePlayerDataLocal({_p})
+
+# SAVE PLAYER DATA LOCAL
+function SavePlayerDataLocal(p: player):
+	stop
+
+# CREATE NEW PLAYER DOCUMENT
+function CreatePlayerDocument(p: player):
+	if {_mode} is "performance":
+		if tps is smaller than 14:
+			stop
+	set {_doc} to a new mongo document
+	set mongo value "Uuid" of {_doc} to {_uuid}
+	insert mongo document {_doc} in {PDAPI::DbCollection}
+	send "&c&lPDAPI DEBUG &7Created a new player database document for %{_p}% in &eDATABASE: %{PDAPI::Db}%&7, &eDATABASE COLLECTION%{PDAPI::DbCollection}%" to console if {PDAPI::Debug} is true
 
 # COMMANDS
 command /playerdataapi:playerdataapi [<text>]:
