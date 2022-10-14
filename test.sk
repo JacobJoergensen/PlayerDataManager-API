@@ -1,6 +1,8 @@
+# CONNECT TO YOUR MONGO DATABASE
 on load:
 	DbConnect("SERVER-STRING", "DATABASE-NAME", "COLLECTION")
 
+# GET YOUR OWN UUID FROM THE DATABASE
 command /getdata:
 	trigger:
 		set {_uuid} to GetPlayerData(player, "Uuid", "performance")
