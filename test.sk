@@ -1,0 +1,7 @@
+on load:
+	DbConnect("mongodb+srv://admin:Jacob090@cluster0.xifqi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority", "Global", "players")
+
+command /getdata:
+	trigger:
+		set {_rank} to GetPlayerData(player, "Rank", "performance")
+		send "&fYour Rank: &7%{_rank}%"
