@@ -1,5 +1,5 @@
 on load:
-	DbConnect("mongodb+srv://admin:Jacob090@cluster0.xifqi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority", "Global", "players")
+	DbConnect("SERVER-STRING", "DATABASE-NAME", "COLLECTION")
 
 command /getdata:
 	trigger:
