@@ -2,7 +2,7 @@
 Work in progress...
 
 
-#### Database Connect
+### Database Connect
 
 Connect to your MongoDB collection.
 
