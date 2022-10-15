@@ -11,9 +11,9 @@ Connect to your MongoDB collection.
 ### GET PLAYER DATA
 Get a specific player data from the database.
 
-    GetPlayerData(player, "<dataset>", "performance")
+    GetPlayerData(player, "<dataset>", true)
     
 ### UPLOAD PLAYER DATA
 Upload a specific player data from the server to the database.
 
-    UploadPlayerData(player, "<dataset>", "<value>", "performance")
+    UploadPlayerData(player, "<dataset>", "<value>", true)
