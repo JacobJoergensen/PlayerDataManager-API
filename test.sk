@@ -5,5 +5,5 @@ on load:
 # GET YOUR OWN UUID FROM THE DATABASE
 command /getdata:
 	trigger:
-		set {_uuid} to GetPlayerData(player, "Uuid", "performance")
+		set {_uuid} to GetPlayerData(player, "Uuid", true)
 		send "&fYour Uuid: &7%{_uuid}%"
