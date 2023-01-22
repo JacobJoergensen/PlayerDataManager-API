@@ -1,5 +1,5 @@
 # PlayerDataManager-API
-Work in progress... (long way..)
+This project is work in progress... (long way..)
 
 # DOCS
 
