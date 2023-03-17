@@ -1,0 +1,9 @@
+# CONNECT TO YOUR MONGO DATABASE
+on load:
+	DbConnect("SERVER-STRING", "DATABASE-NAME", "COLLECTION")
+
+# GET YOUR OWN UUID FROM THE DATABASE
+command /uploaddata:
+	trigger:
+		set {_uuid} to uuid of player
+		UploadPlayerData(player, "Uuid", "%{_uuid}%", true)
