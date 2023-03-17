@@ -3,7 +3,7 @@ function DbConnect(string: text, dbname: text, dbcname: text):
 	set {PDAPI::DbServer} to mongo server with connection string "%{_string}%"
 	set {PDAPI::Db} to mongo database named "%{_dbname}%" of {PDAPI::DbServer}
 	set {PDAPI::DbCollection} to mongo collection named "%{_dbcname}%" of {PDAPI::Db}
-	send "&c&lPDAPI DEBUG &7Connected to &eSERVER: %{PDAPI::DbServer}%&7, &eDATABASE NAME: %{PDAPI::Db}%&7, &eCOLLECTION: %{PDAPI::DbCollection}%" to console if {PDAPI::Debug} is true
+	send "&c&lPDAPI DEBUG &7Connected to &eSERVER: %{PDAPI::DbServer}%&7, &eDATABASE NAME: %{PDAPI::Db}%&7, &eCOLLECTION: %{PDAPI::DbCollection}%" to console if metadata value "PDApiDebug" is true
 
 # GET PLAYER DATA
 function GetPlayerData(p: player, dataset: text, mode: text) :: text:
@@ -38,14 +38,14 @@ function SavePlayerDataLocal(p: player):
 	stop
 
 # CREATE NEW PLAYER DOCUMENT
-function CreatePlayerDocument(p: player):
+function CreatePlayerDocument(p: player, mode: text):
 	if {_mode} is "performance":
 		if tps is smaller than 14:
 			stop
 	set {_doc} to a new mongo document
 	set mongo value "Uuid" of {_doc} to {_uuid}
 	insert mongo document {_doc} in {PDAPI::DbCollection}
-	send "&c&lPDAPI DEBUG &7Created a new player database document for %{_p}% in &eDATABASE: %{PDAPI::Db}%&7, &eDATABASE COLLECTION%{PDAPI::DbCollection}%" to console if {PDAPI::Debug} is true
+	send "&c&lPDAPI DEBUG &7Created a new player database document for %{_p}% in &eDATABASE: %{PDAPI::Db}%&7, &eDATABASE COLLECTION%{PDAPI::DbCollection}%" to console if metadata value "PDApiDebug" is true
 
 # COMMANDS
 command /playerdataapi:playerdataapi [<text>]:
@@ -59,9 +59,9 @@ command /playerdataapi:playerdataapi [<text>]:
 			send "&f"
 			send "&c▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬ &c&lPlayerData API&c ▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬"
 		if arg 1 is "debug":
-			if {PDAPI::Debug} is not set:
-				set {PDAPI::Debug} to true
+			if metadata value "PDApiDebug" is not set:
+				set metadata value "PDApiDebug" to true
 				send action bar "&cDebug Mode enabled" to player
 			else:
-				delete {PDAPI::Debug}
+				delete metadata value "PDApiDebug"
 				send action bar "&cDebug Mode disabled" to player
