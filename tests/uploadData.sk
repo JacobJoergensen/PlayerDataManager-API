@@ -2,7 +2,7 @@
 on load:
 	DbConnect("SERVER-STRING", "DATABASE-NAME", "COLLECTION")
 
-# GET YOUR OWN UUID FROM THE DATABASE
+# UPLOAD YOUR OWN UUID TO THE DATABASE
 command /uploaddata:
 	trigger:
 		set {_uuid} to uuid of player
